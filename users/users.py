@@ -8,7 +8,7 @@ class UserService:
     name = "user_service"
 
     redis = Redis('development')
-
+    '''
     @rpc
     def get(self, cedula):
         #user = self.redis.hgetall(cedula)
@@ -21,6 +21,21 @@ class UserService:
         self.redis.hmset(cedula, {
             "nombre":nombre,
             "apellido":apellido,
+            "email":email
+        })
+        return cedula
+    '''
+    @rpc
+    def get(self, cedula):
+        message = self.redis.hgetall(cedula)
+        return message
+
+    @rpc
+    def create(self, cedula, nombre, apellido, email):
+        #user_id = uuid.uuid4().hex
+        self.redis.hmset(cedula, {
+            "nombre": nombre,
+            "apellido": apellido,
             "email":email
         })
         return cedula

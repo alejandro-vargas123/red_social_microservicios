@@ -12,8 +12,8 @@ class GatewayService:
 
     @http('GET', '/user/<string:cedula>')
     def get_user(self, request, cedula):
-        user = self.user_rpc.hmget(cedula)#get(posiblemente)
-        return json.dumps({'user': user})
+        user = self.user_rpc.get(cedula)#get(posiblemente)
+        return json.dumps(user)
 
     @http('POST', '/user')
     def post_user(self, request):
@@ -25,7 +25,7 @@ class GatewayService:
     @http('GET', '/message/<string:message_id>')
     def get_message(self, request, message_id):
         message = self.message_rpc.get(message_id)
-        return json.dumps({message['cedula']: message['message']})
+        return json.dumps(message)
 
     @http('POST', '/message')
     def post_message(self, request):
