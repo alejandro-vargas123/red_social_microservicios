@@ -11,16 +11,16 @@ class UserService:
 
     @rpc
     def get(self, cedula):
-        user = self.redis.get(cedula)
+        #user = self.redis.hgetall(cedula)
+        user = self.redis.hgetall(cedula)
         return user
 
     @rpc
     def create(self, cedula, nombre, apellido, email):
-        #user_id = uuid.uuid4().hex
-        datos = {
+        #user_id = uuid.uuid4().hex 
+        self.redis.hmset(cedula, {
             "nombre":nombre,
             "apellido":apellido,
             "email":email
-        }
-        self.redis.hmset(cedula, datos)
+        })
         return cedula

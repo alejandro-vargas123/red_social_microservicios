@@ -25,7 +25,7 @@ class GatewayService:
     @http('GET', '/message/<string:message_id>')
     def get_message(self, request, message_id):
         message = self.message_rpc.get(message_id)
-        return json.dumps({'message': message})
+        return json.dumps({message['cedula']: message['message']})
 
     @http('POST', '/message')
     def post_message(self, request):
