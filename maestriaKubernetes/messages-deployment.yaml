@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: messages
+  name: messages
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: messages
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: messages
+    spec:
+      containers:
+        - env:
+            - name: RABBIT_HOST
+              value: rabbit
+            - name: RABBIT_PASSWORD
+              value: guest
+            - name: RABBIT_PORT
+              value: "5672"
+            - name: RABBIT_USER
+              value: guest
+            - name: REDIS_HOST
+              value: redis
+            - name: REDIS_PORT
+              value: "6379"
+          image: alejandrovar/maestria_messages
+          name: messages
+          resources: {}
+      restartPolicy: Always
+status: {}

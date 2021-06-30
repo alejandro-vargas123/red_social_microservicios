@@ -9,27 +9,45 @@ class GatewayService:
 
     user_rpc = RpcProxy('user_service')
     message_rpc = RpcProxy('message_service')
+    auth_rpc = RpcProxy('auth_service')
 
-    @http('GET', '/user/<string:cedula>')
-    def get_user(self, request, cedula):
-        user = self.user_rpc.get(cedula)#get(posiblemente)
+    @http('POST', '/auth')
+    def auth(self, request):
+        data = json.loads(request.get_data(as_text=True))
+        cedula = data['cedula']
+        usuario = self.user_rpc.get(cedula)
+        esExistente = self.user_rpc.verify(cedula)
+        if esExistente:
+            token = self.auth_rpc.access_token(cedula,usuario)
+            return token
+        else:
+            token = 'False'
+            return token
+
+    @http('POST', '/userInfo')
+    def userInfo(self, request):
+        data = json.loads(request.get_data(as_text=True))
+        cedula = data['cedula']
+        user = self.user_rpc.get(cedula)
         return json.dumps(user)
 
-    @http('POST', '/user')
-    def post_user(self, request):
+    @http('POST', '/createUser')
+    def createUser(self, request):
         data = json.loads(request.get_data(as_text=True))
         cedula = self.user_rpc.create(data['cedula'],data['nombre'],data['apellido'],data['email'])
 
         return cedula
 
-    @http('GET', '/message/<string:message_id>')
-    def get_message(self, request, message_id):
+    @http('POST', '/message')
+    def messages(self, request):
+        data = json.loads(request.get_data(as_text=True))
+        message_id = data['message_id']
         message = self.message_rpc.get(message_id)
         return json.dumps(message)
 
-    @http('POST', '/message')
-    def post_message(self, request):
+    @http('POST', '/createMessage')
+    def createMessage(self, request):
         data = json.loads(request.get_data(as_text=True))
-        message_id = self.message_rpc.create(data['cedula'], data['message'])
+        message_id = self.message_rpc.create(data['token'], data['message'])
 
         return message_id

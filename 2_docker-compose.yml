@@ -14,8 +14,7 @@ services:
         - "15672:15672"
 
   users:
-    build:
-      context: users
+    image: alejandrovar/maestria_users
     depends_on:
       - rabbit
     environment:
@@ -27,8 +26,7 @@ services:
         RABBIT_PORT: "5672"
 
   messages:
-    build:
-      context: messages
+    image: alejandrovar/maestria_messages
     depends_on:
       - rabbit
     environment:
@@ -40,8 +38,7 @@ services:
         RABBIT_PORT: "5672"
 
   gateway:
-    build:
-      context: gateway
+    image: alejandrovar/maestria_gateway
     depends_on:
       - rabbit
     ports:
