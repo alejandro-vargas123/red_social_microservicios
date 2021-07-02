@@ -18,7 +18,10 @@ class MessageService:
     @rpc
     def create(self, token, message):
         message_id = uuid.uuid4().hex
-        usuario = jwt.decode(token,"secret",algorithms=["HS256"])
+        try:
+            usuario = jwt.decode(token,"secret",algorithms=["HS256"])
+        except:
+            return "El usuario no exite"
         self.redis.hmset(message_id, {
             "cedula": usuario['cedula'],
             "message": message
